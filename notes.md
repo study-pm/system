@@ -23,6 +23,16 @@
     - [Циклы `for` в стиле C](#циклы-for-в-стиле-c)
     - [Цикл `while`](#цикл-while)
 - [Чтение параметров командной строки](#чтение-параметров-командной-строки)
+  - [Чтение параметров](#чтение-параметров)
+  - [Проверка параметров](#проверка-параметров)
+  - [Подсчёт параметров](#подсчёт-параметров)
+  - [Захват всех параметров командной строки](#захват-всех-параметров-командной-строки)
+  - [Команда shift](#команда-shift)
+  - [Ключи командной строки](#ключи-командной-строки)
+  - [Как различать ключи и параметры](#как-различать-ключи-и-параметры)
+  - [Получение данных от пользователя](#получение-данных-от-пользователя)
+  - [Ввод паролей](#ввод-паролей)
+  - [Чтение данных из файла](#чтение-данных-из-файла)
 
 ## Общее
 [679e897e5040133e8429ed76](https://e-learn.petrocollege.ru/course/view.php?id=6815#section-0)
@@ -436,3 +446,337 @@ done
 
 ## Чтение параметров командной строки
 [679f375d5040133e8429ed7a](https://e-learn.petrocollege.ru/course/view.php?id=6815#section-2)
+
+### Чтение параметров
+[67a331485040133e8429ede5](https://e-learn.petrocollege.ru/mod/resource/view.php?id=313189)
+
+```
+$ ./myscript 10 20
+```
+
+- `$0` — имя скрипта;
+- `$1` — первый параметр;
+- `$2` — второй параметр — и так далее, вплоть до переменной `$9`, в которую попадает девятый параметр.
+
+```sh
+#!/bin/bash
+echo $0
+echo $1
+echo $2
+echo $3
+```
+
+Запустим сценарий с параметрами:
+```
+$ ./myscript 5 10 15
+./myscript
+5
+10
+15
+```
+
+```sh
+#!/bin/bash
+total=$[ $1 + $2 ]
+echo The first parameter is $1.
+echo The second parameter is $2.
+echo The sum is $total.
+```
+
+Запустим скрипт и проверим результат вычислений.
+
+```
+$ ./myscript 5 10
+The first parameter is 5.
+The second parameter is 10.
+The sum is 15.
+```
+
+```sh
+#!/bin/bash
+echo Hello $1, how do you do
+```
+
+Запустим его:
+```
+$ ./myscript Adam
+Hello Adam, how do you do
+```
+
+Как видим, он выводит то, что мы от него ожидаем.
+
+### Проверка параметров
+
+```sh
+#!/bin/bash
+if [ -n "$1" ]
+then
+echo Hello $1.
+else
+echo "No parameters found. "
+fi
+```
+
+Вызовем скрипт сначала с параметром, а потом без параметров.
+
+```
+$ ./myscript Adam
+Hello Adam.
+$ ./myscript
+No parameters found.
+```
+
+### Подсчёт параметров
+
+```sh
+#!/bin/bash
+echo There were $# parameters passed.
+```
+
+Вызовем сценарий.
+
+```
+$ ./myscript 1 2 3 4 5
+There were 5 parameters passed.
+```
+
+```sh
+#!/bin/bash
+echo The last parameter was ${!#}
+```
+
+Вызовем скрипт и посмотрим, что он выведет.
+```
+$ ./myscript 1 2 3 4 5
+The last parameter was 5
+```
+
+### Захват всех параметров командной строки
+Переменная `$*` содержит все параметры, введённые в командной строке, в виде единого «слова».
+
+В переменной `$@` параметры разбиты на отдельные «слова». Эти параметры можно перебирать в циклах. 
+
+```sh
+#!/bin/bash
+echo "Using the \$* method: $*"
+echo "----------"
+echo "Using the \$@ method: $@"
+```
+
+Вот вывод скрипта.
+
+```
+$ ./myscript 1 2 3 4 5
+Using the \$* method: 1 2 3 4 5
+----------
+Using the \$@ method: 1 2 3 4 5
+```
+
+```sh
+#!/bin/bash
+count=1
+for param in "$*"
+do
+echo "\$* Parameter #$count = $param"
+count=$(( $count + 1 ))
+done
+count=1
+for param in "$@"
+do
+echo "\$@ Parameter #$count = $param"
+count=$(( $count + 1 ))
+done
+```
+
+Взгляните на то, что скрипт вывел в консоль. Разница между переменными вполне очевидна.
+
+```
+$ ./myscript 1 2 3 4 5
+$* Parameter #1 = 1 2 3 4 5
+$@ Parameter #1 = 1
+$@ Parameter #2 = 2
+$@ Parameter #3 = 3
+$@ Parameter #4 = 4
+$@ Parameter #5 = 5
+```
+
+### Команда shift
+
+```sh
+#!/bin/bash
+count=1
+while [ -n "$1" ]
+do
+echo "Parameter #$count = $1"
+count=$(( $count + 1 ))
+shift
+done
+```
+
+```
+$ ./myscript 1 2 3 4 5
+$@ Parameter #1 = 1
+$@ Parameter #2 = 2
+$@ Parameter #3 = 3
+$@ Parameter #4 = 4
+$@ Parameter #5 = 5
+```
+
+### Ключи командной строки
+
+```sh
+#!/bin/bash
+echo
+while [ -n "$1" ]
+do
+case "$1" in
+-a) echo "Found the -a option" ;;
+-b) echo "Found the -b option" ;;
+-c) echo "Found the -c option" ;;
+*) echo "$1 is not an option" ;;
+esac
+shift
+done
+```
+
+Запустим скрипт:
+```
+$ ./myscript -a -b -c -d
+
+Found the -a option
+Found the -b option
+Found the -c option
+-d is not an option
+```
+
+### Как различать ключи и параметры
+
+```sh
+#!/bin/bash
+while [ -n "$1" ]
+do
+case "$1" in
+-a) echo "Found the -a option" ;;
+-b) echo "Found the -b option" ;;
+-c) echo "Found the -c option" ;;
+--) shift
+break ;;
+*) echo "$1 is not an option" ;;
+esac
+shift
+done
+count=1
+for param in $@
+do
+echo "Parameter #$count: $param"
+count=$(( $count + 1 ))
+done
+```
+
+```
+$ ./myscript -a -b -c -- 5 10 15
+Found the -a option
+Found the -b option
+Found the -c option
+Parameter #1: 5
+Parameter #2: 10
+Parameter #3: 15
+```
+
+### Получение данных от пользователя
+
+```sh
+#!/bin/bash
+echo -n "Enter your name: "
+read name
+echo "Hello $name, welcome to my program."
+```
+
+```
+$ ./myscript
+Enter your name: Adam
+Hello Adam, welcome to my program.
+```
+
+При вызове `read` можно указывать и несколько переменных:
+```sh
+#!/bin/bash
+read -p "Enter your name: " first last
+echo "Your data for $last, $first..."
+```
+
+Вот что выведет скрипт после запуска.
+
+```
+$ ./myscript
+Enter your name: first last
+Your data for last, first...
+```
+
+Если, вызвав `read`, не указывать переменную, данные, введённые пользователем, будут помещены в специальную переменную среды `REPLY:`
+```sh
+#!/bin/bash
+read -p "Enter your name: "
+echo Hello $REPLY, welcome to my program.
+```
+
+```
+$ ./myscript
+Enter your name: Adam
+Hello Adam, welcome to my program.
+```
+
+```sh
+#/bin/bash
+if read -t 5 -p "Enter your name: " name
+then
+echo "Hello $name, welcome to my script"
+else
+echo "Sorry, too slow! "
+fi
+```
+
+Если данные не будут введены в течение 5 секунд, скрипт выполнит ветвь условного оператора `else`, выведя извинения
+```
+$ ./myscript
+Enter your name: Sorry, too slow!
+```
+
+### Ввод паролей
+
+```sh
+#!/bin/bash
+read -s -p "Enter your password: " pass
+echo "Is your password really $pass? "
+```
+
+Вот как отработает этот скрипт.
+
+```
+$ ./myscript
+Enter your password: Is your password really secretpass?
+```
+
+### Чтение данных из файла
+
+```sh
+#!/bin/bash
+count=1
+cat myfile | while read line
+do
+echo "Line $count: $line"
+count=$(( $count + 1 ))
+done
+echo "Finished"
+```
+
+Посмотрим на него в деле.
+
+```
+$ ./myscript
+Line 1: hello
+Line 2: this
+Line 3: is
+Line 4: test
+Finished
+```
