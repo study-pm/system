@@ -57,6 +57,7 @@
       - [Задание 9](#задание-9)
       - [Задание 10](#задание-10)
       - [Задание 11](#задание-11)
+- [Квалификационный экзамен](#квалификационный-экзамен)
 
 ## Общее
 [679e897e5040133e8429ed76](https://e-learn.petrocollege.ru/course/view.php?id=6815#section-0)
@@ -1321,3 +1322,6 @@ echo "The temp from outside is $temp"
  *   *
 * * * *
 ```
+
+## Квалификационный экзамен
+[67a45f2e5040133e8429ee10](https://e-learn.petrocollege.ru/course/view.php?id=6815#section-5)
