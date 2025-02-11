@@ -1,0 +1,56 @@
+#!/bin/bash
+
+DIR_PATH="$(dirname "$0")"
+
+source $DIR_PATH/CONS.sh
+source $DIR_PATH/utils.sh
+
+if [ -z "$1" ]; then
+  printFormat "Error: Invalid agrument count (must be exactly 1, found $#)" $RED;
+  exit 1
+fi
+
+if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+  printFormat "Error: Invalid argument '$1' (must be a whole number)" $RED;
+  exit 1
+fi
+
+n=$1
+
+if [ $(( $n % 2 )) -eq 0 ]; then
+  printFormat "Error: Invalid argument '$1' (must be an odd number)" $RED;
+  exit 1
+fi
+
+function printTriangle {
+    # Get leading spaces count
+    spaces=$(( $1 - $2 ))
+
+    # Get stars count
+    stars=$(( $1 - $spaces ))
+
+    # Print leading spaces
+    for ((j=1; j<=spaces; j++)); do
+        printf " "
+    done
+
+    # Print stars with spaces in between
+    for ((k=1; k<=stars; k++)); do
+        printf "* "
+    done
+
+    # New line transition
+    echo
+}
+
+# Rombus upper part
+for ((i=1; i<=n; i++)); do
+    printTriangle $n $i
+done
+
+# Rombus bottom part
+for ((i=n-1; i>0; i--)); do
+    printTriangle $n $i
+done
+
+exit 0
