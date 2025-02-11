@@ -60,6 +60,7 @@
 - [Квалификационный экзамен](#квалификационный-экзамен)
   - [Задания к экзамену](#задания-к-экзамену)
 - [Задание №5](#задание-5-1)
+  - [Задание\_5](#задание_5)
 
 ## Общее
 [679e897e5040133e8429ed76](https://e-learn.petrocollege.ru/course/view.php?id=6815#section-0)
@@ -1534,3 +1535,12 @@ $$ (abc^2+ab^2c+abc^2) - 4(3a^2-2b^3+4c^2)^2+(5ab+a^2b^2c^2-6)^2 $$
 
 ## Задание №5
 [67a760065040133e8429ee6c](https://e-learn.petrocollege.ru/course/view.php?id=6815#section-6)
+
+### Задание_5
+[67ab4d6f5040133e8429eec1](https://e-learn.petrocollege.ru/mod/resource/view.php?id=366597)
+
+![Picture 1](./img/67ab4d6f5040133e8429eec1-1.png)
+
+![Picture 2](./img/67ab4d6f5040133e8429eec1-2.png)
+
+![Picture 3](./img/67ab4d6f5040133e8429eec1-3.png)
