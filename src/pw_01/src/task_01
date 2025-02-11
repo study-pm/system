@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# Basic Integer Arithmetic Expression Calculator
+
+# Разработайте сценарий, принимающий *целочисленное выражение* как 3 аргумента командной строки и вычисляющий его.
+# Поддерживаемые операции: `+` (сложение), `-` (вычитание), `x` и `Х` (умножение), `/` (деление).
+# Проверяйте число введённых аргументов и деление на 0.
+
+DIR_PATH="$(dirname "$0")"
+
+source $DIR_PATH/CONS.sh
+source $DIR_PATH/utils.sh
+
+if [ $# != 3 ]; then
+    printFormat "Error: Invalid agrument count (must be exactly 3, found $#)" $RED;
+    echo -e "Correct usage: $0 <operand1> <operator> <operand2>"
+    exit 1
+fi
+
+n1="$1"
+op="$2"
+n2="$3"
+
+pattern=^-?[0-9]+$
+
+if ! [[ "$n1" =~ $pattern ]]; then
+    printFormat "Error: Invalid operand '$n1' (must be an integer number)" $RED
+    exit 1
+fi
+if ! [[ "$n2" =~ $pattern ]]; then
+    printFormat "Error: Invalid operand '$n2' (must be an integer number)" $RED
+    exit 1
+fi
+
+case $op in
+    +) res=$(( $n1 + $n2 ));;
+    -) res=$(( $n1 - $n2 ));;
+    x | X) res=$(( $n1 * $n2 ));;
+    /)
+        if [ $n2 -eq 0 ]; then
+            printFormat "Error: Division by zero (second operand must not be 0)" $RED
+            exit 1
+            else res=$(( $n1 / $n2 ))
+        fi;;
+    *) printFormat "Error: Unsupported operation '$op' (must be '+', '-', 'x', 'X' or '/')" $RED
+       exit 1
+esac
+
+echo $res

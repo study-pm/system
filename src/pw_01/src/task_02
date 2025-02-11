@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Extended Integer Arithmetic Expression Calculator
+
+# Добавьте поддержку арифметического выражения любой длины без учёта приоритетов.
+# Например, можно сперва запомнить первый операнд, а потом сделать сдвиг аргументов командной строки
+
+DIR_PATH="$(dirname "$0")"
+
+source $DIR_PATH/CONS.sh
+source $DIR_PATH/utils.sh
+
+if [ $# -lt 3 ]; then
+    printFormat "Error: Invalid agrument count (must be at least 3, found $#)" $RED;
+    echo -e "Correct usage: $0 <operand1> <operator> <operand2> [<operator2> <operand3>...]"
+    exit 1
+fi
+
+if [ $(($# % 2)) -eq 0 ]; then
+    printFormat "Error: Invalid agrument count (must be an odd quantity, found $#)" $RED;
+    echo -e "Correct usage: $0 <operand1> <operator> <operand2> [<operator2> <operand3>...]"
+    exit 1
+fi
+
+function validateOperand {
+    pattern=^-?[0-9]+$
+
+    if ! [[ "$1" =~ $pattern ]]; then
+        printFormat "Error: Invalid operand '$$1' (must be an integer number)" $RED
+        exit 1
+    fi
+}
+
+validateOperand $1
+res=$1
+shift
+
+while [ $# -gt 1 ]; do
+    op=$1
+    n=$2
+
+    validateOperand $n
+
+    if [ "$op" = "/" ] && [ "$n" -eq 0 ]; then
+        printFormat "Error: Division by zero (second operand must not be 0)" $RED
+        exit 1
+    fi
+
+    case $op in
+        +) res=$(( $res + $n ));;
+        -) res=$(( $res - $n ));;
+        x | X) res=$(( $res * $n ));;
+        /) res=$(( $res / $n ));;
+        *) printFormat "Error: Unsupported operation '$op' (must be '+', '-', 'x', 'X' or '/')" $RED
+        exit 1
+    esac
+
+    shift 2
+done
+
+echo $res
+
+exit 0
