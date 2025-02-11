@@ -6,7 +6,7 @@ source $DIR_PATH/CONS.sh
 source $DIR_PATH/utils.sh
 
 if [ -z "$1" ]; then
-  printFormat "Error: Invalid agrument count (must be exactly 1, found $#)" $RED;
+  printFormat "Error: Invalid agrument count (must be at least one argument provided)" $RED;
   exit 1
 fi
 
@@ -18,7 +18,7 @@ fi
 n=$1
 
 if [ $(( $n % 2 )) -eq 0 ]; then
-  printFormat "Error: Invalid argument '$1' (must be an odd number)" $RED;
+  printFormat "Error: Invalid argument '$1' (must be an odd whole number)" $RED;
   exit 1
 fi
 
