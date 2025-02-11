@@ -5,7 +5,9 @@ DIR_PATH="$(dirname "$0")"
 source $DIR_PATH/CONS.sh
 source $DIR_PATH/utils.sh
 
-printFormat "=== Running ===" $BLUE $BOLD
+printFormat "*********************************************************************" $BLUE $BOLD
+printFormat "* === Run Basic Integer Arithmetic Expression Calculator Checks === *" $BLUE $BOLD
+printFormat "*********************************************************************" $BLUE $BOLD
 printFormat -n "Case" $BLUE $BOLD $UNDERLINE
 printFormat " Error: Invalid argument count" $BLUE
 printFormat "- Call 1: ./task_01" $GRAY
