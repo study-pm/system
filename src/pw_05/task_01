@@ -1,0 +1,53 @@
+#!/bin/bash
+
+DIR_PATH="$(dirname "$0")"
+
+source $DIR_PATH/CONS.sh
+source $DIR_PATH/utils.sh
+
+# 1. Enter X, Y, Z, W
+if [ $# -eq 4 ]; then
+    x=$1
+    y=$2
+    z=$3
+    w=$4
+else
+    read -p "Enter X: " x
+    read -p "Enter Y: " y
+    read -p "Enter Z: " z
+    read -p "Enter W: " w
+fi
+
+# 2. Print X, Y, Z, W
+echo "X = $x, Y = $y, Z = $z, W = $w"
+
+# Convert to floating-point numbers for calculations
+x=$(echo "$x" | awk '{printf "%.6f", $1}')
+y=$(echo "$y" | awk '{printf "%.6f", $1}')
+z=$(echo "$z" | awk '{printf "%.6f", $1}')
+w=$(echo "$w" | awk '{printf "%.6f", $1}')
+
+# 3. X > 0 AND Z < 5
+if awk "BEGIN {exit !($x > 0 && $z < 5)}" ; then
+    # 5. F := X ** 2 + W
+    f=$(awk "BEGIN {print ($x * $x + $w)}")
+    # 8. Print F
+    printFormat $f $GREEN
+# 4. X > 0 AND Z >= 5
+elif awk "BEGIN {exit !($x > 0 && $z >= 5)}"; then
+    cosine=$(cos "$z")
+    # 7. F := cos(Z) + X * Y
+    f=$(awk -v x="$x" -v y="$y" -v cosine="$cosine" 'BEGIN {print (cosine + x * y)}')
+    # 11. Print F
+    printFormat $f $GREEN
+# 6. X < 0 AND Z > 5
+elif awk "BEGIN {exit !($x < 0 && $z > 5)}"; then
+    cosine=$(cos "$y")
+    # 10. F := W + X * cos(Y)
+    f=$(awk -v x="$x" -v w="$w" -v cosine="$cosine" 'BEGIN {print (w + x * cosine)}')
+    # 12. Print F
+    printFormat $f $GREEN
+else
+    # 9. Print Unsupported case
+    printFormat "Случай не предусмотрен" $GREEN
+fi
