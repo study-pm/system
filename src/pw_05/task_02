@@ -35,7 +35,6 @@ if awk "BEGIN {exit !($x > 0)}" ; then
         f=$(awk "BEGIN {print ($x * $x + $w)}")
     else
         # 8. F := cos(Z) + X * Y
-        echo "else"
         cosine=$(cos "$z")
         f=$(awk -v x="$x" -v y="$y" -v cosine="$cosine" 'BEGIN {print (cosine + x * y)}')
     fi
