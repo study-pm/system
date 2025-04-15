@@ -48,6 +48,6 @@ elif awk "BEGIN {exit !($x < 0 && $z > 5)}"; then
     # 12. Print F
     printFormat $f $GREEN
 else
-    # 9. Print F
+    # 9. Print Unsupported case
     printFormat "Случай не предусмотрен" $GREEN
 fi
