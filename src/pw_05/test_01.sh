@@ -23,7 +23,7 @@ $DIR_PATH/task_01 1.23 2.33 5.78 9
 printFormat "- Expected: 3.86082" $GRAY
 printFormat -n "Case 03:" $BLUE $BOLD $UNDERLINE
 printFormat " 1 > 2 > 3 > 4 > 6 > 10 > 12" $BLUE
-printFormat "- Execution 5: ./task_01 -1.23 2.33 5.78 9" $GRAY
+printFormat "- Execution 4: ./task_01 -1.23 2.33 5.78 9" $GRAY
 $DIR_PATH/task_01 -1.23 2.33 5.78 9
 printFormat "- Expected: 7.77102" $GRAY
 printFormat -n "Case 04 (Unsupported):" $BLUE $BOLD $UNDERLINE
